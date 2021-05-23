@@ -1,3 +1,8 @@
 ﻿<AuthorizeView>
-    Hello, @context.User.Identity.Name!
+    <Authorized>
+        Hello, @context.User.Identity.Name!
+    </Authorized>
+    <NotAuthorized>
+        Sorry, you are not signed in. This app uses Windows Authentication and needs to be hosted in IIS to provide output!
+    </NotAuthorized>
 </AuthorizeView>
