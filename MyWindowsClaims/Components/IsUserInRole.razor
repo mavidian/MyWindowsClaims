@@ -1,0 +1,24 @@
+﻿
+Enter the role name to see if the user is in this role
+
+<input placeholder="Enter role" @onchange="@OnRoleChange"/>
+@_isUserInRole
+<br/>
+
+@code {
+
+   [Parameter]
+   public ClaimsPrincipal User { get; set; }
+
+   private string _isUserInRole { get; set; }
+
+   private void OnRoleChange(ChangeEventArgs args)
+   {
+       var role = args.Value as string;
+       if (role == null) return;
+       _isUserInRole = string.IsNullOrWhiteSpace(role) ? string.Empty : User.IsInRole(role)
+                     ? $"Yes, {User.Identity.Name} is in {role} role."
+                     : $"No, {User.Identity.Name} is not in {role} role.";
+   }
+
+}

@@ -1,14 +1,14 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor contextAccessor
-@using System.Security.Claims;
-@using System.Security.Principal;
-@using System.Runtime.Versioning 
-@attribute  [SupportedOSPlatform("windows")]
+
+@using System.Runtime.Versioning
+@attribute [SupportedOSPlatform("windows")]
 
 <h3>Details of current user from HTTP context</h3>
 
 <p>User Name: @_identity.Name</p>
 <p>Is authenticated? @(_identity.IsAuthenticated ? "Yes" : "No")</p>
 <p>Authentication type: @_identity.AuthenticationType</p>
+<IsUserInRole User="@_currentUser" />
 <p>There are @_claims.Count claims for current user:</p>
 <table>
     <thead align="left">
@@ -22,15 +22,15 @@
     <tbody>
         @foreach (var claim in _claims)
         {
-        <tr>
-            @{
-                var sidInfo = GetSidInfo(claim.Value);
-            }
-            <td>@claim.Value</td>
-            <td>@claim.Type.Split('/').Last()</td>
-            <td>@sidInfo.KnownType</td>
-            <td>@sidInfo.Account</td>
-        </tr>
+            <tr>
+                @{
+                    var sidInfo = GetSidInfo(claim.Value);
+                }
+                <td>@claim.Value</td>
+                <td>@claim.Type.Split('/').Last()</td>
+                <td>@sidInfo.KnownType</td>
+                <td>@sidInfo.Account</td>
+            </tr>
         }
     </tbody>
 </table>
@@ -64,11 +64,11 @@
         return (WellKnownSids.FirstOrDefault(s => sid.IsWellKnown(s)), sid.Translate(typeof(NTAccount)));
     }
 
-   /// <summary>
-   /// Wrapper over GetSidDetails that translates the well known SID type and an account to their string represenations (or &lt;n/a&gt;'s if passed string is not a SID).
-   /// </summary>
-   /// <param name="sidValue"></param>
-   /// <returns>A tuple containing string represenations of a well known SID type and an account (user or group).</returns>
+    /// <summary>
+    /// Wrapper over GetSidDetails that translates the well known SID type and an account to their string represenations (or &lt;n/a&gt;'s if passed string is not a SID).
+    /// </summary>
+    /// <param name="sidValue"></param>
+    /// <returns>A tuple containing string represenations of a well known SID type and an account (user or group).</returns>
     private (string KnownType, string Account) GetSidInfo(string sidValue)
     {
         var sidDetails = GetSidDetails(sidValue);
